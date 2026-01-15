@@ -5,44 +5,35 @@ plugins {
 }
 
 android {
-    namespace = "com.devops.testness" // Modern Gradle requires namespace
-    compileSdk = flutter.compileSdkVersion
 
     defaultConfig {
-        applicationId = "com.devops.testness"
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId = "com.devops.testness" // CHANGE ALL DEFAULT ID
+        // You can update the following values to match your application needs.
+        // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-
-        // Safely get build number from Codemagic or default to 1 for local builds
-        val buildNumber = System.getenv("PROJECT_BUILD_NUMBER")?.toIntOrNull() ?: 1
-        versionCode = buildNumber
-        versionName = "1.0.$buildNumber"
+        versionCode = System.getenv("CM_BUILD_ID")?.toInt()
+        versionName = "1.0.${System.getenv("CM_BUILD_ID")?.toInt()}"
     }
 
-    signingConfigs {
+ signingConfigs {
         create("release") {
-            // These variables are automatically provided by Codemagic 
-            // if you have uploaded your keystore in the UI
-            val keystorePath = System.getenv("CM_KEYSTORE_PATH")
-            if (keystorePath != null) {
-                storeFile = file(keystorePath)
-                storePassword = System.getenv("CM_KEYSTORE_PASSWORD")
-                keyAlias = System.getenv("CM_KEY_ALIAS")
-                keyPassword = System.getenv("CM_KEY_PASSWORD")
-            }
+            storeFile = file(System.getenv("CM_KEYSTORE_PATH")) 
+            storePassword = System.getenv("CM_KEYSTORE_PASSWORD")
+            keyAlias = System.getenv("CM_KEY_ALIAS")
+            keyPassword = System.getenv("CM_KEY_PASSWORD")
         }
     }
 
     buildTypes {
         release {
-            // Apply the release signing config defined above
-            signingConfig = signingConfigs.getByName("release")
-            
-            // Optional: commonly used for production
-            isMinifyEnabled = false
-            isShrinkResources = false
-        }
-    }
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig = signingConfigs.getByName("release")        
+}
+}
+
 }
 
 flutter {
