@@ -7,30 +7,33 @@ plugins {
 
 android {
     defaultConfig {
-        applicationId = "com.devops.testDeploy"
-
+        applicationId = "com.devops.testness"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
 
-        versionCode = (System.getenv("CM_BUILD_ID") ?: "1").toInt()
-        versionName = "1.0.${System.getenv("CM_BUILD_ID") ?: "1"}"
+        // Use PROJECT_BUILD_NUMBER which is an integer
+        val buildNumber = System.getenv("PROJECT_BUILD_NUMBER")?.toIntOrNull() ?: 1
+        versionCode = buildNumber
+        versionName = "1.0.$buildNumber"
     }
 
     signingConfigs {
-        create("release") {
-            storeFile = file("android/upload-keystore.jks")
-            storePassword = System.getenv("CM_KEYSTORE_PASSWORD")
-            keyAlias = System.getenv("CM_KEY_ALIAS")
-            keyPassword = System.getenv("CM_KEY_PASSWORD")
+            create("release") {
+                storeFile = file(System.getenv("CM_KEYSTORE_PATH")) 
+                storePassword = System.getenv("CM_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("CM_KEY_ALIAS")
+                keyPassword = System.getenv("CM_KEY_PASSWORD")
+            }
         }
+
+        buildTypes {
+            release {
+                // TODO: Add your own signing config for the release build.
+                // Signing with the debug keys for now, so `flutter run --release` works.
+                signingConfig = signingConfigs.getByName("release")        
     }
-    buildTypes {
-        getByName("release") {
-            signingConfig = signingConfigs.getByName("release")
-            isMinifyEnabled = false
-            isShrinkResources = false
-        }
     }
+
 }
 
 flutter {
