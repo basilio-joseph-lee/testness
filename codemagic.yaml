@@ -1,0 +1,18 @@
+workflows:
+  flutter-release:
+    name: Flutter Release
+    environment:
+      flutter: stable
+
+    scripts:
+      - name: Get dependencies
+        script: flutter pub get
+
+      - name: Decode keystore
+        script: echo $CM_KEYSTORE | base64 --decode > android/upload-keystore.jks
+
+      - name: Build release AAB
+        script: flutter build appbundle --release
+
+    artifacts:
+      - build/app/outputs/bundle/release/*.aab
