@@ -6,6 +6,19 @@ plugins {
 
 android {
 
+    namespace = "com.devops.testness"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.devops.testness" // CHANGE ALL DEFAULT ID
@@ -17,22 +30,23 @@ android {
         versionName = "1.0.${System.getenv("CM_BUILD_ID")?.toInt()}"
     }
 
- signingConfigs {
-        create("release") {
-            storeFile = file(System.getenv("CM_KEYSTORE_PATH")) 
-            storePassword = System.getenv("CM_KEYSTORE_PASSWORD")
-            keyAlias = System.getenv("CM_KEY_ALIAS")
-            keyPassword = System.getenv("CM_KEY_PASSWORD")
+    signingConfigs {
+            create("release") {
+                storeFile = file(System.getenv("CM_KEYSTORE_PATH")) 
+                storePassword = System.getenv("CM_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("CM_KEY_ALIAS")
+                keyPassword = System.getenv("CM_KEY_PASSWORD")
+            }
         }
+
+        buildTypes {
+            release {
+                // TODO: Add your own signing config for the release build.
+                // Signing with the debug keys for now, so `flutter run --release` works.
+                signingConfig = signingConfigs.getByName("release")        
+    }
     }
 
-    buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("release")        
-}
-}
 
 }
 
