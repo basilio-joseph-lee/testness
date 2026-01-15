@@ -7,7 +7,7 @@ plugins {
 
 android {
     defaultConfig {
-        applicationId = "com.devops.current_weather"
+        applicationId = "com.devops.testDeploy"
 
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
