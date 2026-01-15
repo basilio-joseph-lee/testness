@@ -26,8 +26,9 @@ android {
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-        versionCode = System.getenv("CM_BUILD_ID")?.toInt()
-        versionName = "1.0.${System.getenv("CM_BUILD_ID")?.toInt()}"
+      versionCode = (System.currentTimeMillis() / 1000).toInt()
+        versionName = "1.0.${System.currentTimeMillis() / 1000}"
+
     }
 
     signingConfigs {
